@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Warehouse Data Viewer</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            color: #4CAF50;
+        }
+        div {
+            margin: 20px 0;
+        }
+        h3 {
+            margin-top: 40px;
+            font-size: 2em;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            url: "http://localhost:8080/warehouse/001/data", // Stellen Sie sicher, dass dieser Endpunkt JSON-Daten zurückgibt
+            type: "GET",
+            success: function(data) {
+                $('#warehouseID').append(data.warehouseID);
+                $('#warehouseName').append(data.warehouseName);
+                $('#timestamp').append(data.timestamp);
+
+                data.products.forEach(function(product) {
+                    $('#products').append('<div>' + product.productName + ' - ' + product.productQuantity + ' ' + product.productUnit + '</div>');
+                });
+            },
+            error: function(error) {
+                console.log("Es gab einen Fehler beim Abrufen der Daten: ", error);
+            }
+        });
+    });
+</script>
+<body>
+<h2>Warehouse Data</h2>
+<div>Warehouse ID: <span id="warehouseID"></span></div>
+<div>Warehouse Name: <span id="warehouseName"></span></div>
+<div>Timestamp: <span id="timestamp"></span></div>
+<h3>Products:</h3>
+<div id="products"></div> <!-- Produkte werden hier aufgelistet -->
+</body>
+</html>
